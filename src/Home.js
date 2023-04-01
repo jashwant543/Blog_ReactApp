@@ -1,5 +1,5 @@
 
-import  React,{ useState , useEffect} from "react";
+import React from "react";
 import BlogList from "./BlogList";
 import useFetch from "./useFetch";
 
@@ -12,6 +12,7 @@ export default function Home () {
             {error && <div>{error} </div> }
            {isPending && <div>Loading..............</div>}
             {blogs && <BlogList  blogs = {blogs} title = {"All Blogs!"} />}
+           
         
             
             
