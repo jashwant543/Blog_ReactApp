@@ -1,14 +1,33 @@
 import React from "react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom"; 
 const Create = () => {
     const [title,setTitle]=useState("");
     const[body,setBody]=useState("");
     const [author,setAuthor] = useState("");
+    const [isPending,setIsPending]=useState(false);
+    const [usermessage,setUsermessage]=useState("");
+    const history = useHistory();
 
     const handleSubmit  = (e)=>{
         e.preventDefault();
+        setIsPending(true);
+        setUsermessage("");
         const blog = {title,body,author};
-        console.log(blog);
+       fetch("http://localhost:8000/blogs",{
+        method:"PoST",
+        headers:{"content-type":"application/json"},
+        body:JSON.stringify(blog)
+       }).then(()=>{
+        console.log("data adeedd");
+        setIsPending(false);
+        setUsermessage("Data added");
+        history.push("/");
+
+
+       })
+        
+       
 
     }
     return (  
@@ -30,16 +49,14 @@ const Create = () => {
                 onChange={(e)=>setBody(e.target.value)}
                ></textarea>
                <label htmlFor="">Blog author</label>
-               <select 
-               value={ author}
-               onChange={(e)=>setAuthor(e.target.value)}>
-                <option value="mario">Mario</option>
-                <option value="Yoshi">Yoshi</option>
-               </select>
-               <button>Add Blog</button>
-               <p>{title}</p>
-               <p>{body}</p>
-               <p>{author}</p>
+               <input type="text" required 
+                 value={author}
+                 onChange ={(e)=>setAuthor(e.target.value)}></input>
+              
+               {isPending &&  <button disabled>Adding  Blog.........</button> }
+               {!isPending && <button>Add Blog</button>}
+               {usermessage !== " " && <div>{usermessage}</div>}
+             
             </form>
         </div>
     );
